@@ -20,7 +20,7 @@ const Login = () => {
           </div>
           <div className='mb-4'>
             <label htmlFor="password" className='block text-gray-700 text-sm font-bold mb-2'>Password</label>
-            <input {...register("passsword", { required: true })} type="password" name='password' id='password' className='shadow apperance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow' placeholder='*******' />
+            <input {...register("password", { required: true })} type="password" name='password' id='password' className='shadow apperance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow' placeholder='*******' />
           </div>
           {
             message && <p className="text-red-500 text-xs italice mb-3">{message}</p>
