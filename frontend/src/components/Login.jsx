@@ -1,10 +1,12 @@
+// Suggested code may be subject to a license. Learn more: ~LicenseLog:3895257629.
+// Suggested code may be subject to a license. Learn more: ~LicenseLog:4239871353.
 import React, { useState } from 'react'
 import { useForm } from "react-hook-form";
 import { FaGoogle } from "react-icons/fa";
 import { Link } from 'react-router-dom'
 
 const Login = () => {
-  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm();
   const [message, setMessage] = useState('');
 
   const onSubmit = (data) => console.log(data)
@@ -17,10 +19,12 @@ const Login = () => {
           <div className='mb-4'>
             <label htmlFor="email" className='block text-gray-700 text-sm font-bold mb-2'>Email</label>
             <input {...register("email", { required: true })} type="email" name='email' id='email' className='shadow apperance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow' placeholder='Email Address' />
+            {errors.email && <p className="text-red-500 text-xs italic">Email is required</p>}
           </div>
           <div className='mb-4'>
             <label htmlFor="password" className='block text-gray-700 text-sm font-bold mb-2'>Password</label>
             <input {...register("password", { required: true })} type="password" name='password' id='password' className='shadow apperance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow' placeholder='*******' />
+            {errors.password && <p className="text-red-500 text-xs italic">Password is required</p>}
           </div>
           {
             message && <p className="text-red-500 text-xs italice mb-3">{message}</p>
