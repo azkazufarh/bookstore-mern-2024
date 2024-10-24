@@ -2,12 +2,22 @@ import React, { useState } from 'react'
 import { useForm } from "react-hook-form";
 import { FaGoogle } from "react-icons/fa";
 import { Link } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext';
 
 const Register = () => {
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
   const [message, setMessage] = useState('');
+  const {registerUser} = useAuth();
 
-  const onSubmit = (data) => console.log(data)
+  const onSubmit = async (data) => {
+    console.log(data)
+    try {
+      await registerUser(data.email, data.password);
+      alert("Registration successful")
+    } catch (error) {
+      setMessage("Please provide a valid email and password")
+    }
+  }
   return (
     <div className='h-[calc(100vh-120px)] flex justify-center items-center'>
       <div className="w-full max-w-sm mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
@@ -25,7 +35,7 @@ const Register = () => {
           {
             message && <p className="text-red-500 text-xs italice mb-3">{message}</p>
           }
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-8 rounded focus:outline-none">Login</button>
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-8 rounded focus:outline-none">Register</button>
         </form>
         <p className="align-baseline font-medium mt-4 text-sm">Have an account? Please <Link to='/login' className='text-blue-500'>login</Link></p>
         <div className='mt-4'>

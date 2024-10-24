@@ -14,7 +14,7 @@ const postBook = async (req, res) => {
 const getAllBooks = async (req, res) => {
     try {
         const books = await Book.find().sort({ createdAt: -1 });
-        res.status(200).json({message: "Books fetched succesfully!", books});
+        res.status(200).json(books);
     } catch (error) {
         console.error("Error fetching book:", error);
         res.status(500).json("Failed to fetch book")

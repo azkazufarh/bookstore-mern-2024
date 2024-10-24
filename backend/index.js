@@ -8,13 +8,18 @@ require('dotenv').config()
 
 app.use(express.json());
 app.use(cors({
-    origin: ['http://localhost:5173/'],
+    origin: ['http://localhost:5173/', 'https://5173-idx-bookstore-app-1729149021656.cluster-7ubberrabzh4qqy2g4z7wgxuw2.cloudworkstations.dev'],
     credentials: true
 }))
 
 // routes
 const bookRoutes = require('./src/books/book.route');
+const orderRoutes = require('./src/orders/order.route');
+const authRoutes = require('./src/users/user.route');
+
 app.use('/api/books', bookRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/auth', authRoutes)
 
 
 async function main() {

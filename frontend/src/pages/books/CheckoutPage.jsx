@@ -1,19 +1,24 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '../../context/AuthContext';
+import { useCreateOrderMutation } from '../../redux/features/orders/orderApi';
+import Swal from 'sweetalert2';
 
 const CheckoutPage = () => {
     const cartItems = useSelector(state => state.cart.cartItems);
     const totalPrice = cartItems.reduce((total, item) => total + item.newPrice, 0).toFixed(2)
-    const currentUser = true;
+    const {currentUser} = useAuth();
     const [isChecked, setIsChecked] = useState(false);
+    const [createOrder, {isLoading, error}] = useCreateOrderMutation()
+    const navigate = useNavigate()
 
      const { register, handleSubmit, watch, formState: { errors } } = useForm();
-     const onSubmit = (data) => {
+     const onSubmit = async  (data) => {
         const newOrder = {
             name: data.name,
-            email: currentUser?.email,
+            email: data.email,
             address: {
                 city: data.city,
                 country: data.country,
@@ -24,9 +29,28 @@ const CheckoutPage = () => {
             productsIds: cartItems.map(item => item?._id),
             totalPrice
         }
+        console.log(JSON.stringify(newOrder))
 
-        console.log(newOrder)
+        try {
+            await createOrder(newOrder).unwrap();
+            Swal.fire({
+                title: "Confirmed Order",
+                text: "Your order placed successfully!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, It's Okay!"
+              });
+              navigate("/orders")
+        } catch (error) {
+            console.error("Error place an order ". error)
+            alert("Error place an order")
+        }
       };
+  
+      if(isLoading) return <div>Loading....</div>
+
   return (
     <div className="min-h-screen p-6 bg-gray-100 flex items-center justify-center">
         <div className="container max-w-screen-lg mx-auto">
@@ -38,7 +62,7 @@ const CheckoutPage = () => {
                 </div>
 
                 <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
-                        <form className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3 my-8" onSubmit={() => handleSubmit(onSubmit)}>
+                        <form className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3 my-8" onSubmit={handleSubmit(onSubmit)}>
                             <div className="text-gray-600">
                                 <p className="font-medium text-lg">Personal Details</p>
                                 <p>Please fill out all the fields.</p>

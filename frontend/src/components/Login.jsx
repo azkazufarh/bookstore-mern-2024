@@ -3,13 +3,35 @@
 import React, { useState } from 'react'
 import { useForm } from "react-hook-form";
 import { FaGoogle } from "react-icons/fa";
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [message, setMessage] = useState('');
+  const {loginUser, signInWithGoogle} = useAuth()
+  const navigate = useNavigate()
 
-  const onSubmit = (data) => console.log(data)
+  const onSubmit = async (data) => {
+    try {
+      await loginUser(data.email, data.password);
+      alert("login successful")
+      navigate("/")
+    } catch (error) {
+      setMessage("Please provide a valid email and password")
+    }
+  }
+
+  const handleGoogleSignIn = async () => {
+    try {
+      await signInWithGoogle();
+      alert("login successful")
+      navigate("/")
+    } catch (error) {
+      setMessage("Please provide a valid email and password")
+    }
+  }
+
   return (
     <div className='h-[calc(100vh-120px)] flex justify-center items-center'>
       <div className="w-full max-w-sm mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
@@ -33,7 +55,7 @@ const Login = () => {
         </form>
         <p className="align-baseline font-medium mt-4 text-sm">Haven't an account? Please <Link to='/register' className='text-blue-500'>register</Link></p>
         <div className='mt-4'>
-          <button className="w-full flex flex-wrap gap-1 items-center justify-center bg-secondary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none">
+          <button onClick={() => handleGoogleSignIn()} className="w-full flex flex-wrap gap-1 items-center justify-center bg-secondary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none">
             <FaGoogle className='mr-2' />
             Sign in with Google
           </button>
