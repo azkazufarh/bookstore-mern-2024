@@ -8,7 +8,7 @@ require('dotenv').config()
 
 app.use(express.json());
 app.use(cors({
-    origin: ['http://localhost:5173/', 'https://5173-idx-bookstore-app-1729149021656.cluster-7ubberrabzh4qqy2g4z7wgxuw2.cloudworkstations.dev'],
+    origin: ['http://localhost:5173'],
     credentials: true
 }))
 
